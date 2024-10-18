@@ -37,7 +37,8 @@ class _MyAppState extends State<MyApp> {
                 Expanded(
                   child: Center(
                     child: OutlinedButton(
-                      onPressed: _waveController.path.isNotEmpty
+                      onPressed: !_waveController.isRecording &&
+                              _waveController.path.isNotEmpty
                           ? _playRecording
                           : null,
                       child: const Text('Play'),

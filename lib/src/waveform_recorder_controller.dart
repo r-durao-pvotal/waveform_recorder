@@ -38,8 +38,6 @@ class WaveformRecorderController extends ChangeNotifier {
     if (_audioRecorder != null) throw Exception('Already recording');
     assert(_amplitudeStream == null);
     assert(_startTime == null);
-    assert(_length == Duration.zero);
-    assert(_path.isEmpty);
 
     // start the recording into a temp file (or in memory on the web)
     _startTime = DateTime.now();
