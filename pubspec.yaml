@@ -1,0 +1,20 @@
+name: waveform_recorder
+description: "A package for recording audio with waveform visualization."
+version: 0.1.0
+homepage: https://github.com/csells/waveform_recorder
+
+environment:
+  sdk: ^3.5.3
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  gap: ^3.0.1
+  record: ^5.1.2
+  waveform_flutter: ^1.1.0
+
+dev_dependencies:
+  all_lint_rules_community: ^0.0.41
+  flutter_test:
+    sdk: flutter

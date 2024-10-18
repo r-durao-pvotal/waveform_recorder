@@ -1,0 +1,24 @@
+name: waveform_recorder_example
+description: "An example of the waveform_recorder package in action."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  audioplayers: any
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  gap: any
+  waveform_recorder:
+    path: ../
+
+dev_dependencies:
+  all_lint_rules_community: ^0.0.41
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
