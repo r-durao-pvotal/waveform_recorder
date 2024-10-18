@@ -39,10 +39,13 @@ class WaveformRecorderController extends ChangeNotifier {
     assert(_amplitudeStream == null);
     assert(_startTime == null);
 
+    // request permissions (needed for Android)
+    _audioRecorder = AudioRecorder();
+    await _audioRecorder!.hasPermission();
+
     // start the recording into a temp file (or in memory on the web)
     _startTime = DateTime.now();
     _length = Duration.zero;
-    _audioRecorder = AudioRecorder();
     final config = RecordConfig(encoder: encoder, numChannels: 1);
     final path = await PlatformHelper.getTempPath('m4a');
     await _audioRecorder!.start(config, path: path);
