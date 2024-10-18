@@ -1,11 +1,10 @@
 The waveform_recorder package provides a widget to show a waveform as an audio stream is being recorded in the style of recent AI chat packages.
 
-TODO: screenshot
+![Screenshot of waveform_recorder in action](https://raw.githubusercontent.com/csells/waveform_recorder/refs/heads/main/readme/screenshot.png)
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+The main entry point is the `WaveformRecorder`, which requires an instance of the `WaveformRecorderController` to start/stop recording.
 
 ```dart
 import 'dart:async';
