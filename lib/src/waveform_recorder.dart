@@ -63,24 +63,25 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          const Gap(8),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(_elapsedTime),
-          ),
-          const Gap(8),
-          Expanded(
-            child: SizedBox(
-              height: widget.height,
-              child: AnimatedWaveList(
-                stream: widget.controller.amplitudeStream,
+  Widget build(BuildContext context) => SizedBox(
+        height: widget.height,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(_elapsedTime),
               ),
-            ),
+              const Gap(8),
+              Expanded(
+                child: AnimatedWaveList(
+                  stream: widget.controller.amplitudeStream,
+                ),
+              ),
+            ],
           ),
-          const Gap(8),
-        ],
+        ),
       );
 
   String get _elapsedTime {
