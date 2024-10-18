@@ -16,7 +16,15 @@ TODO: update
 
 ### Usage Considerations
 
-For all platforms except the web, the output of a record operation is a file on your hard drive; it's your app's responsibility to remove this temp file when it's done with it. You can get the path to that file from the `WaveformRecorderController.path` property and it's passed to you in the `OnRecordingEnd` callback.
+For all platforms except the web, the output of a record operation is a file on your hard drive; it's your app's responsibility to remove this temp file when it's done with it. When executing on the web, the URL of the recorded audio will be a blob URL but otherwise, it will be a URL with a `file` scheme. You can get the path to that file from the `WaveformRecorderController.url` property, e.g.
+
+```dart
+Future<void> _deleteRecording() async {
+  if (_waveController.url?.isScheme('file') ?? false) {
+    await File(_waveController.url!.path).delete();
+  }
+}
+```
 
 ## Feedback
 

@@ -18,10 +18,7 @@ class WaveformRecorder extends StatefulWidget {
   final double height;
   final WaveformRecorderController controller;
   final Function()? onStartRecording;
-  final Function({
-    required String path,
-    required Duration length,
-  })? onEndRecording;
+  final Function()? onEndRecording;
 
   @override
   State<WaveformRecorder> createState() => _WaveformRecorderState();
@@ -50,10 +47,7 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
     if (!widget.controller.isRecording) {
       _timer?.cancel();
       _timer = null;
-      widget.onEndRecording?.call(
-        path: widget.controller.path,
-        length: widget.controller.length,
-      );
+      widget.onEndRecording?.call();
     }
   }
 

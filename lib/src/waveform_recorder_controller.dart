@@ -9,14 +9,14 @@ import 'platform_helper/platform_helper.dart';
 class WaveformRecorderController extends ChangeNotifier {
   Stream<waveform.Amplitude>? _amplitudeStream;
   AudioRecorder? _audioRecorder;
-  var _path = '';
+  Uri? _url;
   var _length = Duration.zero;
   DateTime? _startTime;
 
   bool get isRecording => _audioRecorder != null;
   Stream<waveform.Amplitude> get amplitudeStream =>
       _amplitudeStream ?? (throw Exception('Not recording'));
-  String get path => _path;
+  Uri? get url => _url;
   Duration get length => _length;
   DateTime? get startTime => _startTime;
 
@@ -25,7 +25,7 @@ class WaveformRecorderController extends ChangeNotifier {
     _amplitudeStream = null;
     unawaited(_audioRecorder?.dispose());
     _audioRecorder = null;
-    _path = '';
+    _url = null;
     _length = Duration.zero;
     _startTime = null;
     super.dispose();
@@ -60,9 +60,12 @@ class WaveformRecorderController extends ChangeNotifier {
 
   Future<void> stopRecording() async {
     if (_audioRecorder == null) throw Exception('Not recording');
+    assert(_url == null);
+    assert(_length == Duration.zero);
 
-    _path = await _audioRecorder!.stop() ?? '';
-    if (_path.isNotEmpty) {
+    final path = await _audioRecorder!.stop() ?? '';
+    if (path.isNotEmpty) {
+      _url = kIsWeb ? Uri.parse(path) : Uri.file(path);
       _length = DateTime.now().difference(_startTime!);
     }
 

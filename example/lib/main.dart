@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
@@ -38,7 +37,7 @@ class _MyAppState extends State<MyApp> {
                   child: Center(
                     child: OutlinedButton(
                       onPressed: !_waveController.isRecording &&
-                              _waveController.path.isNotEmpty
+                              _waveController.url != null
                           ? _playRecording
                           : null,
                       child: const Text('Play'),
@@ -94,16 +93,10 @@ class _MyAppState extends State<MyApp> {
         false => _waveController.startRecording(),
       };
 
-  void _onEndRecording({
-    required String path,
-    required Duration length,
-  }) =>
-      _textController.text = '$path: ${length.inMilliseconds / 1000} seconds';
+  void _onEndRecording() => _textController.text = ''
+      '${_waveController.url}: '
+      '${_waveController.length.inMilliseconds / 1000} seconds';
 
-  // TODO: cross_file
-  void _playRecording() => unawaited(
-        AudioPlayer().play(kIsWeb
-            ? UrlSource(_waveController.path)
-            : DeviceFileSource(_waveController.path)),
-      );
+  void _playRecording() =>
+      unawaited(AudioPlayer().play(UrlSource(_waveController.url.toString())));
 }
