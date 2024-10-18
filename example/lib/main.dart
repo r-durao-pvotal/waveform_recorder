@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
                 Expanded(
                   child: Center(
                     child: OutlinedButton(
-                      onPressed: _waveController.bytes.isNotEmpty
+                      onPressed: _waveController.path.isNotEmpty
                           ? _playRecording
                           : null,
                       child: const Text('Play'),
@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
                               ? WaveformRecorder(
                                   height: 48,
                                   controller: _waveController,
-                                  onRecordingDone: _onRecordingDone,
+                                  onEndRecording: _onEndRecording,
                                 )
                               : TextField(
                                   controller: _textController,
@@ -93,13 +93,16 @@ class _MyAppState extends State<MyApp> {
         false => _waveController.startRecording(),
       };
 
-  void _onRecordingDone({
-    required Uint8List bytes,
-    required Duration duration,
+  void _onEndRecording({
+    required String path,
+    required Duration length,
   }) =>
-      _textController.text =
-          '${bytes.length} bytes, ${duration.inMilliseconds / 1000} seconds';
+      _textController.text = '$path: ${length.inMilliseconds / 1000} seconds';
 
-  void _playRecording() =>
-      unawaited(AudioPlayer().play(BytesSource(_waveController.bytes)));
+  // TODO: cross_file
+  void _playRecording() => unawaited(
+        AudioPlayer().play(kIsWeb
+            ? UrlSource(_waveController.path)
+            : DeviceFileSource(_waveController.path)),
+      );
 }

@@ -1,4 +1,9 @@
 # This is a generated file; do not edit or check into version control.
+path_provider=/Users/csells/.pub-cache/hosted/pub.dev/path_provider-2.1.4/
+path_provider_android=/Users/csells/.pub-cache/hosted/pub.dev/path_provider_android-2.2.12/
+path_provider_foundation=/Users/csells/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/
+path_provider_linux=/Users/csells/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+path_provider_windows=/Users/csells/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
 record=/Users/csells/.pub-cache/hosted/pub.dev/record-5.1.2/
 record_android=/Users/csells/.pub-cache/hosted/pub.dev/record_android-1.2.6/
 record_darwin=/Users/csells/.pub-cache/hosted/pub.dev/record_darwin-1.1.2/

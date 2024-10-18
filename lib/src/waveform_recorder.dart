@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
@@ -11,30 +10,32 @@ class WaveformRecorder extends StatefulWidget {
   const WaveformRecorder({
     required this.height,
     required this.controller,
-    this.onRecordingDone,
+    this.onStartRecording,
+    this.onEndRecording,
     super.key,
   });
 
   final double height;
   final WaveformRecorderController controller;
+  final Function()? onStartRecording;
   final Function({
-    required Uint8List bytes,
-    required Duration duration,
-  })? onRecordingDone;
+    required String path,
+    required Duration length,
+  })? onEndRecording;
 
   @override
   State<WaveformRecorder> createState() => _WaveformRecorderState();
 }
 
 class _WaveformRecorderState extends State<WaveformRecorder> {
-  final DateTime _startTime = DateTime.now();
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.onRecordingDone != null) {
+    widget.onStartRecording?.call();
+    if (widget.onEndRecording != null) {
       widget.controller.addListener(_onRecordingChange);
     }
 
@@ -45,12 +46,13 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
   }
 
   void _onRecordingChange() {
-    assert(widget.onRecordingDone != null);
+    assert(widget.onEndRecording != null);
     if (!widget.controller.isRecording) {
-      final duration = DateTime.now().difference(_startTime);
-      widget.onRecordingDone?.call(
-        bytes: widget.controller.bytes,
-        duration: duration,
+      _timer?.cancel();
+      _timer = null;
+      widget.onEndRecording?.call(
+        path: widget.controller.path,
+        length: widget.controller.length,
       );
     }
   }
@@ -85,7 +87,7 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
       );
 
   String get _elapsedTime {
-    final elapsed = DateTime.now().difference(_startTime);
+    final elapsed = DateTime.now().difference(widget.controller.startTime!);
     return ''
         '${elapsed.inMinutes.toString().padLeft(2, '0')}:'
         '${(elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
