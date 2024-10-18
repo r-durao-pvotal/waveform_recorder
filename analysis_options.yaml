@@ -24,7 +24,7 @@ linter:
     prefer_final_parameters: false # I like the sentiment, but too much typing!
     prefer_asserts_with_message: false # too lazy for this...
     require_trailing_commas: false # not good for things all on one line
-    public_member_api_docs: false # except for public libs
+    public_member_api_docs: true # except for public libs
     avoid_classes_with_only_static_members: false # need this; no namespaces
     always_put_control_body_on_new_line: false # single line is nice when we can
     always_use_package_imports: false # prefer relative imports for local files

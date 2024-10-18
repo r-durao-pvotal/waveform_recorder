@@ -6,6 +6,7 @@ import 'package:waveform_flutter/waveform_flutter.dart' as waveform;
 
 import 'platform_helper/platform_helper.dart';
 
+/// A controller for managing audio recording and waveform generation.
 class WaveformRecorderController extends ChangeNotifier {
   Stream<waveform.Amplitude>? _amplitudeStream;
   AudioRecorder? _audioRecorder;
@@ -13,11 +14,22 @@ class WaveformRecorderController extends ChangeNotifier {
   var _length = Duration.zero;
   DateTime? _startTime;
 
+  /// Indicates whether audio recording is currently in progress.
   bool get isRecording => _audioRecorder != null;
+
+  /// Provides a stream of amplitude data for generating the waveform.
+  ///
+  /// Throws an exception if called when not recording.
   Stream<waveform.Amplitude> get amplitudeStream =>
       _amplitudeStream ?? (throw Exception('Not recording'));
+
+  /// The URL of the recorded audio file, or null if no recording has been made.
   Uri? get url => _url;
+
+  /// The duration of the recorded audio.
   Duration get length => _length;
+
+  /// The start time of the current or last recording session.
   DateTime? get startTime => _startTime;
 
   @override
@@ -31,6 +43,13 @@ class WaveformRecorderController extends ChangeNotifier {
     super.dispose();
   }
 
+  /// Starts a new audio recording session.
+  ///
+  /// [interval] determines how often amplitude data is emitted (default is
+  /// 250ms). [encoder] specifies the audio encoding format (default is
+  /// platform-dependent).
+  ///
+  /// Throws an exception if already recording.
   Future<void> startRecording({
     Duration interval = const Duration(milliseconds: 250),
     AudioEncoder encoder = kIsWeb ? AudioEncoder.wav : AudioEncoder.aacLc,
@@ -58,6 +77,9 @@ class WaveformRecorderController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Stops the current audio recording session.
+  ///
+  /// Throws an exception if not currently recording.
   Future<void> stopRecording() async {
     if (_audioRecorder == null) throw Exception('Not recording');
     assert(_url == null);

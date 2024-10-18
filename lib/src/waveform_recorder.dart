@@ -6,7 +6,11 @@ import 'package:waveform_flutter/waveform_flutter.dart';
 
 import 'waveform_recorder_controller.dart';
 
+/// A widget that displays a waveform visualization of audio recording.
 class WaveformRecorder extends StatefulWidget {
+  /// Creates a WaveformRecorder widget.
+  ///
+  /// The [height] and [controller] parameters are required.
   const WaveformRecorder({
     required this.height,
     required this.controller,
@@ -15,9 +19,16 @@ class WaveformRecorder extends StatefulWidget {
     super.key,
   });
 
+  /// The height of the waveform visualization.
   final double height;
+
+  /// The controller for managing the audio recording and waveform generation.
   final WaveformRecorderController controller;
+
+  /// A callback function that is called when recording starts.
   final Function()? onStartRecording;
+
+  /// A callback function that is called when recording ends.
   final Function()? onEndRecording;
 
   @override
