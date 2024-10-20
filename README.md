@@ -4,11 +4,11 @@ The [waveform_recorder package](https://pub.dev/packages/waveform_recorder) prov
 
 ## Setup
 
-For this package to work, you'll need to set up the underlying `record` package according to the instructions here: https://pub.dev/packages/record#setup-permissions-and-others
+For this package to work, you'll need to set up [the underlying `record` package](https://pub.dev/packages/record) according to [the setup and permission instructions](https://pub.dev/packages/record#setup-permissions-and-others).
 
 ## Usage
 
-The main entry point for this package is the `WaveformRecorder` widget, which requires an instance of the `WaveformRecorderController` to start/stop recording. Here's an example of using the recorder to record and then playing back the recorded audio:
+The main entry point for this package is the `WaveformRecorder` widget, which requires an instance of the `WaveformRecorderController` to start/stop recording. Here's an example of using the recorder to record audio and then allowing the user to play it back:
 
 ```dart
 import 'dart:async';
