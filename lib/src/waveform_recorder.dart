@@ -14,8 +14,8 @@ class WaveformRecorder extends StatefulWidget {
   const WaveformRecorder({
     required this.height,
     required this.controller,
-    this.onStartRecording,
-    this.onEndRecording,
+    this.onRecordingStarted,
+    this.onRecordingStopped,
     super.key,
   });
 
@@ -26,10 +26,10 @@ class WaveformRecorder extends StatefulWidget {
   final WaveformRecorderController controller;
 
   /// A callback function that is called when recording starts.
-  final Function()? onStartRecording;
+  final Function()? onRecordingStarted;
 
   /// A callback function that is called when recording ends.
-  final Function()? onEndRecording;
+  final Function()? onRecordingStopped;
 
   @override
   State<WaveformRecorder> createState() => _WaveformRecorderState();
@@ -42,8 +42,8 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
   void initState() {
     super.initState();
 
-    widget.onStartRecording?.call();
-    if (widget.onEndRecording != null) {
+    widget.onRecordingStarted?.call();
+    if (widget.onRecordingStopped != null) {
       widget.controller.addListener(_onRecordingChange);
     }
 
@@ -54,11 +54,11 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
   }
 
   void _onRecordingChange() {
-    assert(widget.onEndRecording != null);
+    assert(widget.onRecordingStopped != null);
     if (!widget.controller.isRecording) {
       _timer?.cancel();
       _timer = null;
-      widget.onEndRecording?.call();
+      widget.onRecordingStopped?.call();
     }
   }
 

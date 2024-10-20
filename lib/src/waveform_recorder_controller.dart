@@ -57,6 +57,8 @@ class WaveformRecorderController extends ChangeNotifier {
     if (_audioRecorder != null) throw Exception('Already recording');
     assert(_amplitudeStream == null);
     assert(_startTime == null);
+    _url = null;
+    _length = Duration.zero;
 
     // request permissions (needed for Android)
     _audioRecorder = AudioRecorder();

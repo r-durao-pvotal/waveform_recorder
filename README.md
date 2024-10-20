@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                               ? WaveformRecorder(
                                   height: 48,
                                   controller: _waveController,
-                                  onEndRecording: _onEndRecording,
+                                  onRecordingStopped: _onRecordingStopped,
                                 )
                               : TextField(
                                   controller: _textController,
@@ -106,7 +106,7 @@ class _MyAppState extends State<MyApp> {
         false => _waveController.startRecording(),
       };
 
-  void _onEndRecording() => _textController.text = ''
+  void _onRecordingStopped() => _textController.text = ''
       '${_waveController.url}: '
       '${_waveController.length.inMilliseconds / 1000} seconds';
 
