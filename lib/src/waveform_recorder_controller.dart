@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as ph; // path helper
 import 'package:record/record.dart';
 import 'package:waveform_flutter/waveform_flutter.dart' as waveform;
 
@@ -8,9 +10,30 @@ import 'platform_helper/platform_helper.dart';
 
 /// A controller for managing audio recording and waveform generation.
 class WaveformRecorderController extends ChangeNotifier {
+  /// Creates a new instance of [WaveformRecorderController].
+  ///
+  ///
+  /// [interval] determines how often amplitude data is emitted (default is
+  /// 250ms). [encoder] specifies the audio encoding format (default is
+  /// platform-dependent).
+  WaveformRecorderController({
+    this.interval = const Duration(milliseconds: 250),
+    this.encoder = kIsWeb ? AudioEncoder.wav : AudioEncoder.aacLc,
+  });
+
+  /// The interval at which amplitude data is emitted during recording.
+  ///
+  /// This determines how frequently the waveform is updated. Default is 250ms.
+  final Duration interval;
+
+  /// The audio encoding format used for recording.
+  ///
+  /// Default is platform-dependent: WAV for web, AAC-LC for other platforms.
+  final AudioEncoder encoder;
+
   Stream<waveform.Amplitude>? _amplitudeStream;
   AudioRecorder? _audioRecorder;
-  Uri? _url;
+  XFile? _file;
   var _length = Duration.zero;
   DateTime? _startTime;
 
@@ -23,8 +46,12 @@ class WaveformRecorderController extends ChangeNotifier {
   Stream<waveform.Amplitude> get amplitudeStream =>
       _amplitudeStream ?? (throw Exception('Not recording'));
 
-  /// The URL of the recorded audio file, or null if no recording has been made.
-  Uri? get url => _url;
+  /// The recorded audio file.
+  ///
+  /// This property returns the [XFile] containing the recorded audio data. It
+  /// will be null if no recording has been made or if the recording process
+  /// hasn't completed.
+  XFile? get file => _file;
 
   /// The duration of the recorded audio.
   Duration get length => _length;
@@ -37,7 +64,7 @@ class WaveformRecorderController extends ChangeNotifier {
     _amplitudeStream = null;
     unawaited(_audioRecorder?.dispose());
     _audioRecorder = null;
-    _url = null;
+    _file = null;
     _length = Duration.zero;
     _startTime = null;
     super.dispose();
@@ -45,19 +72,12 @@ class WaveformRecorderController extends ChangeNotifier {
 
   /// Starts a new audio recording session.
   ///
-  /// [interval] determines how often amplitude data is emitted (default is
-  /// 250ms). [encoder] specifies the audio encoding format (default is
-  /// platform-dependent).
-  ///
   /// Throws an exception if already recording.
-  Future<void> startRecording({
-    Duration interval = const Duration(milliseconds: 250),
-    AudioEncoder encoder = kIsWeb ? AudioEncoder.wav : AudioEncoder.aacLc,
-  }) async {
+  Future<void> startRecording() async {
     if (_audioRecorder != null) throw Exception('Already recording');
     assert(_amplitudeStream == null);
     assert(_startTime == null);
-    _url = null;
+    _file = null;
     _length = Duration.zero;
 
     // request permissions (needed for Android)
@@ -68,7 +88,8 @@ class WaveformRecorderController extends ChangeNotifier {
     _startTime = DateTime.now();
     _length = Duration.zero;
     final config = RecordConfig(encoder: encoder, numChannels: 1);
-    final path = await PlatformHelper.getTempPath('m4a');
+    final ext = _extFor(encoder);
+    final path = await PlatformHelper.getTempPath(ext);
     await _audioRecorder!.start(config, path: path);
 
     // map the amplitude types as they stream in
@@ -84,12 +105,12 @@ class WaveformRecorderController extends ChangeNotifier {
   /// Throws an exception if not currently recording.
   Future<void> stopRecording() async {
     if (_audioRecorder == null) throw Exception('Not recording');
-    assert(_url == null);
+    assert(_file == null);
     assert(_length == Duration.zero);
 
     final path = await _audioRecorder!.stop() ?? '';
     if (path.isNotEmpty) {
-      _url = kIsWeb ? Uri.parse(path) : Uri.file(path);
+      _file = _fileFor(encoder, path);
       _length = DateTime.now().difference(_startTime!);
     }
 
@@ -100,4 +121,35 @@ class WaveformRecorderController extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  XFile _fileFor(AudioEncoder encoder, String path) {
+    final ext = _extFor(encoder);
+    final mimetype = _mimeTypeFor(encoder);
+    final name = kIsWeb ? 'audio.$ext' : ph.basename(path);
+    return XFile(path, name: name, mimeType: mimetype);
+  }
+
+  String _extFor(AudioEncoder encoder) => switch (encoder) {
+        AudioEncoder.aacLc ||
+        AudioEncoder.aacEld ||
+        AudioEncoder.aacHe =>
+          'm4a',
+        AudioEncoder.amrNb || AudioEncoder.amrWb => '3gp',
+        AudioEncoder.opus => 'opus',
+        AudioEncoder.flac => 'flac',
+        AudioEncoder.wav => 'wav',
+        AudioEncoder.pcm16bits => 'pcm',
+      };
+
+  String _mimeTypeFor(AudioEncoder encoder) => switch (encoder) {
+        AudioEncoder.aacLc ||
+        AudioEncoder.aacEld ||
+        AudioEncoder.aacHe ||
+        AudioEncoder.opus =>
+          'audio/mp4',
+        AudioEncoder.amrNb || AudioEncoder.amrWb => 'audio/3gpp',
+        AudioEncoder.flac => 'audio/flac',
+        AudioEncoder.wav => 'audio/wav',
+        AudioEncoder.pcm16bits => 'audio/pcm',
+      };
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+// import 'package:waveform_recorder/src/platform_helper/platform_helper.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
 void main() => runApp(const MyApp());
@@ -37,7 +39,7 @@ class _MyAppState extends State<MyApp> {
                   child: Center(
                     child: OutlinedButton(
                       onPressed: !_waveController.isRecording &&
-                              _waveController.url != null
+                              _waveController.file != null
                           ? _playRecording
                           : null,
                       child: const Text('Play'),
@@ -93,10 +95,30 @@ class _MyAppState extends State<MyApp> {
         false => _waveController.startRecording(),
       };
 
-  void _onRecordingStopped() => _textController.text = ''
-      '${_waveController.url}: '
-      '${_waveController.length.inMilliseconds / 1000} seconds';
+  Future<void> _onRecordingStopped() async {
+    final file = _waveController.file;
+    if (file == null) return;
 
-  void _playRecording() =>
-      unawaited(AudioPlayer().play(UrlSource(_waveController.url.toString())));
+    _textController.text = ''
+        '${file.name}: '
+        '${_waveController.length.inMilliseconds / 1000} seconds';
+
+    debugPrint('XFile properties:');
+    debugPrint('  path: ${file.path}');
+    debugPrint('  name: ${file.name}');
+    debugPrint('  mimeType: ${file.mimeType}');
+
+    // download file from web to ensure it's a playable set of bytes
+    // assert(await () async {
+    //   await PlatformHelper.downloadFile(file);
+    //   return true;
+    // }());
+  }
+
+  Future<void> _playRecording() async {
+    final file = _waveController.file;
+    if (file == null) return;
+    final source = kIsWeb ? UrlSource(file.path) : DeviceFileSource(file.path);
+    await AudioPlayer().play(source);
+  }
 }

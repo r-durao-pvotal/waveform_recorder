@@ -12,9 +12,6 @@ analyzer:
     # some rules conflict; instead, we're explicitly enabling even conflicting
     # rules and are fixing the conflicts in this file
     included_file_warning: ignore
-    missing_required_param: error
-    missing_return: error
-    parameter_assignments: error
 
 linter:
   rules:

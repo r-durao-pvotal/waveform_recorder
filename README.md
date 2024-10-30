@@ -14,6 +14,7 @@ The main entry point for this package is the `WaveformRecorder` widget, which re
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                   child: Center(
                     child: OutlinedButton(
                       onPressed: !_waveController.isRecording &&
-                              _waveController.url != null
+                              _waveController.file != null
                           ? _playRecording
                           : null,
                       child: const Text('Play'),
@@ -106,24 +107,39 @@ class _MyAppState extends State<MyApp> {
         false => _waveController.startRecording(),
       };
 
-  void _onRecordingStopped() => _textController.text = ''
-      '${_waveController.url}: '
-      '${_waveController.length.inMilliseconds / 1000} seconds';
+  Future<void> _onRecordingStopped() async {
+    final file = _waveController.file;
+    if (file == null) return;
 
-  void _playRecording() =>
-      unawaited(AudioPlayer().play(UrlSource(_waveController.url.toString())));
+    _textController.text = ''
+        '${file.name}: '
+        '${_waveController.length.inMilliseconds / 1000} seconds';
+
+    debugPrint('XFile properties:');
+    debugPrint('  path: ${file.path}');
+    debugPrint('  name: ${file.name}');
+    debugPrint('  mimeType: ${file.mimeType}');
+  }
+
+  Future<void> _playRecording() async {
+    final file = _waveController.file;
+    if (file == null) return;
+    final source = kIsWeb ? UrlSource(file.path) : DeviceFileSource(file.path);
+    await AudioPlayer().play(source);
+  }
 }
 ```
 
 ### Usage Considerations
 
-For all platforms except the web, the output of a record operation is a file on your hard drive; it's your app's responsibility to remove this temp file when it's done with it. When executing on the web, the URL of the recorded audio will be a blob URL but otherwise, it will be a URL with a `file` scheme. You can get the path to that file from the `WaveformRecorderController.url` property, e.g.
+For all platforms except the web, the output of a record operation is a file on your hard drive; it's your app's responsibility to remove this temp file when it's done with it. When executing on the web, the file (an instance of the XFile type from [the cross_file package](https://pub.dev/packages/cross_file)) of the recorded audio will contain a path to a blob URL but otherwise, it will be a file in the file system. You can get the path to that file from `WaveformRecorderController.file.path`, e.g.
 
 ```dart
-Future<void> _deleteRecording() async {
-  final url = _waveController.url;
-  if (url != null && url.isScheme('file')) await File(url.path).delete();
-}
+  Future<void> _deleteRecording() async {
+    final file = _waveController.file;
+    if (file == null) return;
+    if (kIsWeb) await File(file.path).delete();
+  }
 ```
 
 ## Feedback
