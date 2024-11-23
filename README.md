@@ -138,7 +138,7 @@ For all platforms except the web, the output of a record operation is a file on 
   Future<void> _deleteRecording() async {
     final file = _waveController.file;
     if (file == null) return;
-    if (kIsWeb) await File(file.path).delete();
+    if (!kIsWeb) await File(file.path).delete();
   }
 ```
 
