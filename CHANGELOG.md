@@ -1,3 +1,7 @@
+## 1.3.1
+
+* README tweak
+
 ## 1.3.0
 
 * downgraded the SDK requiredment to allow for more users
