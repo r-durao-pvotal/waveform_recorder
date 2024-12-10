@@ -16,6 +16,9 @@ class WaveformRecorder extends StatefulWidget {
     required this.controller,
     this.onRecordingStarted,
     this.onRecordingStopped,
+    this.waveColor = const Color(0xFF000000), // Default to black
+    this.durationTextStyle =
+        const TextStyle(color: Color(0xFF000000)), // Default to black
     super.key,
   });
 
@@ -30,6 +33,12 @@ class WaveformRecorder extends StatefulWidget {
 
   /// A callback function that is called when recording ends.
   final Function()? onRecordingStopped;
+
+  /// The color of the waveform bars.
+  final Color waveColor;
+
+  /// The text style for the duration text.
+  final TextStyle durationTextStyle;
 
   @override
   State<WaveformRecorder> createState() => _WaveformRecorderState();
@@ -78,12 +87,20 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(_elapsedTime),
+                child: Text(
+                  _elapsedTime,
+                  style: widget.durationTextStyle,
+                ),
               ),
               const Gap(8),
               Expanded(
                 child: AnimatedWaveList(
                   stream: widget.controller.amplitudeStream,
+                  barBuilder: (animation, amplitude) => WaveFormBar(
+                    animation: animation,
+                    amplitude: amplitude,
+                    color: widget.waveColor,
+                  ),
                 ),
               ),
             ],

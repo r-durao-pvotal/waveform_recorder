@@ -1,3 +1,7 @@
+## 1.4
+
+* fix [#2](https://github.com/csells/waveform_recorder/issues/2): Add a customization option for colors for wave bar and duration text
+
 ## 1.3.1
 
 * README tweak
