@@ -15,6 +15,7 @@ analyzer:
     missing_required_param: error
     missing_return: error
     parameter_assignments: error
+    specify_nonobvious_local_variable_types: ignore
 
 linter:
   rules:

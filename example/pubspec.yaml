@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   audioplayers: any
+  cross_file: ^0.3.4+2
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
