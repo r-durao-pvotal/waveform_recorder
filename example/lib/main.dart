@@ -81,6 +81,13 @@ class _MyAppState extends State<MyApp> {
                         ),
                         onPressed: _toggleRecording,
                       ),
+                      if (_waveController.isRecording)
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                          ),
+                          onPressed: _cancelRecording,
+                        ),
                     ],
                   ),
                 ),
@@ -94,6 +101,11 @@ class _MyAppState extends State<MyApp> {
         true => _waveController.stopRecording(),
         false => _waveController.startRecording(),
       };
+
+  Future<void> _cancelRecording() async {
+    await _waveController.cancelRecording();
+    return;
+  }
 
   Future<void> _onRecordingStopped() async {
     final file = _waveController.file;

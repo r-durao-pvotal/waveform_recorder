@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
@@ -114,6 +115,40 @@ class WaveformRecorderController extends ChangeNotifier {
       _length = DateTime.now().difference(_startTime!);
     }
 
+    unawaited(_audioRecorder!.dispose());
+    _audioRecorder = null;
+    _amplitudeStream = null;
+    _startTime = null;
+
+    notifyListeners();
+  }
+
+  /// Cancels the current audio recording session.
+  ///
+  /// This method stops the recording, deletes any temporary recording files,
+  /// and resets the controller state. It does not save the recorded audio.
+  ///
+  /// Throws an exception if not currently recordin
+  Future<void> cancelRecording() async {
+    if (_audioRecorder == null) throw Exception('Not recording');
+    assert(_file == null);
+    assert(_length == Duration.zero);
+
+    // Stop the recording without saving the file
+    final path = await _audioRecorder!.stop() ?? '';
+    if (path.isNotEmpty) {
+      // Optionally delete the temporary file
+      try {
+        final tempFile = File(path);
+        if (tempFile.existsSync()) {
+          await tempFile.delete();
+        }
+      } catch (e) {
+        debugPrint('Error deleting temporary recording file: $e');
+      }
+    }
+
+    // Clean up resources
     unawaited(_audioRecorder!.dispose());
     _audioRecorder = null;
     _amplitudeStream = null;
