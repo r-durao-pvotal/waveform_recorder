@@ -1,8 +1,15 @@
-## 1.4
+## 1.5.0
+* fix [#3](https://github.com/csells/waveform_recorder/issues/3): Add a cancel
+option. Thanks to @YajatKaul for [the PR](https://github.com/csells/waveform_recorder/pull/4)!
 
-* fix [#2](https://github.com/csells/waveform_recorder/issues/2): Add a customization option for colors for wave bar and duration text
+## 1.4.0
+
+* fix [#2](https://github.com/csells/waveform_recorder/issues/2): Add a
+customization option for colors for wave bar and duration text
 
 ## 1.3.1
+
+* Add an on waveController.cancel option to it #3
 
 * README tweak
 

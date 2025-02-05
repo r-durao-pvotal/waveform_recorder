@@ -134,17 +134,17 @@ class WaveformRecorderController extends ChangeNotifier {
     assert(_file == null);
     assert(_length == Duration.zero);
 
-    // Stop the recording without saving the file
+    // stop the recording without saving the file
     final path = await _audioRecorder!.stop() ?? '';
     if (path.isNotEmpty) {
-      // Optionally delete the temporary file
+      // delete the temporary file (if there is one)
       try {
         final tempFile = File(path);
         if (tempFile.existsSync()) {
           await tempFile.delete();
         }
-      } catch (e) {
-        debugPrint('Error deleting temporary recording file: $e');
+      } on Exception catch (e) {
+        debugPrint('Error deleting temp recording file: $e');
       }
     }
 
