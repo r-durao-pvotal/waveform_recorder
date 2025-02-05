@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io';
+
+// import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
@@ -134,19 +135,9 @@ class WaveformRecorderController extends ChangeNotifier {
     assert(_file == null);
     assert(_length == Duration.zero);
 
-    // stop the recording without saving the file
+    // stop the recording, deleting the temp file (if there is one)
     final path = await _audioRecorder!.stop() ?? '';
-    if (path.isNotEmpty) {
-      // delete the temporary file (if there is one)
-      try {
-        final tempFile = File(path);
-        if (tempFile.existsSync()) {
-          await tempFile.delete();
-        }
-      } on Exception catch (e) {
-        debugPrint('Error deleting temp recording file: $e');
-      }
-    }
+    await PlatformHelper.deleteTempAudioFile(path);
 
     // Clean up resources
     unawaited(_audioRecorder!.dispose());

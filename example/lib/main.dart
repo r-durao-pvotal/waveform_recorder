@@ -104,7 +104,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _cancelRecording() async {
     await _waveController.cancelRecording();
-    return;
+    _textController.text = 'canceled';
   }
 
   Future<void> _onRecordingStopped() async {

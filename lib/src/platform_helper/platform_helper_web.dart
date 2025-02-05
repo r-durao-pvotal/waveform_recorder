@@ -26,4 +26,13 @@ class PlatformHelper {
     anchor.click();
     web.document.body!.removeChild(anchor);
   }
+
+  /// Deletes a temporary audio file at the specified path.
+  ///
+  /// This method is a no-op on web platforms since temporary files are handled
+  /// via blob URLs which are automatically cleaned up by the browser.
+  ///
+  /// [path] is ignored in the web implementation since file paths are not
+  /// applicable in the web context.
+  static Future<void> deleteTempAudioFile(String path) async {}
 }

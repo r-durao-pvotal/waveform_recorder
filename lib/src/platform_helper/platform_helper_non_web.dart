@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cross_file/cross_file.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -31,5 +32,24 @@ class PlatformHelper {
     final dir = (await getDownloadsDirectory())!;
     final path = p.join(dir.path, file.name);
     await File(path).writeAsBytes(await file.readAsBytes());
+  }
+
+  /// Deletes a temporary audio file at the specified path.
+  ///
+  /// This method attempts to delete the file at [path] if it exists. If the path
+  /// is empty or if there are any errors during deletion, they are handled
+  /// gracefully.
+  ///
+  /// [path] is the file system path to the temporary audio file to be deleted.
+  static Future<void> deleteTempAudioFile(String path) async {
+    if (path.isNotEmpty) {
+      // delete the temporary file (if there is one)
+      try {
+        final tempFile = File(path);
+        if (tempFile.existsSync()) await tempFile.delete();
+      } on Exception catch (e) {
+        debugPrint('Error deleting temp recording file: $e');
+      }
+    }
   }
 }
