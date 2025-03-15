@@ -1,4 +1,9 @@
+## 1.6.0
+
+* fix [#TODO]: TODO
+
 ## 1.5.0
+
 * fix [#3](https://github.com/csells/waveform_recorder/issues/3): Add a cancel
 option. Thanks to @YajatKaul for [the PR](https://github.com/csells/waveform_recorder/pull/4)!
 

@@ -36,8 +36,8 @@ class PlatformHelper {
 
   /// Deletes a temporary audio file at the specified path.
   ///
-  /// This method attempts to delete the file at [path] if it exists. If the path
-  /// is empty or if there are any errors during deletion, they are handled
+  /// This method attempts to delete the file at [path] if it exists. If the
+  /// path is empty or if there are any errors during deletion, they are handled
   /// gracefully.
   ///
   /// [path] is the file system path to the temporary audio file to be deleted.
