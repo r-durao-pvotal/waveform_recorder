@@ -1,3 +1,7 @@
+## 1.6.3
+
+* another screenshot tweak
+
 ## 1.6.2
 
 * README screenshot tweak
