@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -22,16 +21,6 @@ class PlatformHelper {
       dir.path,
       'audio-${DateTime.now().millisecondsSinceEpoch}.$ext',
     );
-  }
-
-  /// Downloads the given XFile as an audio file in the browser to the user's
-  /// Downloads directory
-  ///
-  /// [file] is the XFile to be downloaded.
-  static Future<void> downloadFile(XFile file) async {
-    final dir = (await getDownloadsDirectory())!;
-    final path = p.join(dir.path, file.name);
-    await File(path).writeAsBytes(await file.readAsBytes());
   }
 
   /// Deletes a temporary audio file at the specified path.

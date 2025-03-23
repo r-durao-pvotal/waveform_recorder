@@ -158,4 +158,5 @@ file in the file system. You can get the path to that file from
 
 ## Feedback
 
-Your feedback via [issues](https://github.com/csells/waveform_recorder/issues) or [PRs](https://github.com/csells/waveform_recorder/pulls) is welcome!
+Your feedback via [issues](https://github.com/csells/waveform_recorder/issues)
+or [PRs](https://github.com/csells/waveform_recorder/pulls) is welcome!

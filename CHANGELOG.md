@@ -11,7 +11,9 @@
 * updated the example app to show the waveform after it's been recorded
   (although it's pretty ugly as it is; PRs appreciated!)
 
-* update the example app to allow for deleted the generated file
+* updated the example app to allow for deleted the recorded file
+
+* updated the example app to allow for downloading the recorded file
 
 ## 1.6.0
 
