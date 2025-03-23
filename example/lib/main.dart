@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
@@ -91,6 +92,26 @@ class _MyAppState extends State<MyApp> {
                           ),
                           onPressed: _togglePauseRecording,
                         ),
+                      if (_waveController.isRecording)
+                        IconButton(
+                          tooltip: 'Cancel Recording',
+                          icon: Container(
+                            width: 32,
+                            height: 32,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.close,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onPressed: _cancelRecording,
+                        ),
                       IconButton(
                         tooltip: _waveController.isRecording
                             ? 'Stop Recording'
@@ -116,26 +137,6 @@ class _MyAppState extends State<MyApp> {
                         ),
                         onPressed: _toggleRecording,
                       ),
-                      if (_waveController.isRecording)
-                        IconButton(
-                          tooltip: 'Cancel Recording',
-                          icon: Container(
-                            width: 32,
-                            height: 32,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red,
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.close,
-                                size: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          onPressed: _cancelRecording,
-                        ),
                       IconButton(
                         tooltip: _waveController.isRecording
                             ? ''
@@ -164,6 +165,31 @@ class _MyAppState extends State<MyApp> {
                             ),
                           ),
                         ),
+                      ),
+                      IconButton(
+                        tooltip: _waveController.file != null
+                            ? 'Delete Recording'
+                            : '',
+                        icon: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _waveController.file != null
+                                ? Colors.black
+                                : Colors.grey,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.delete,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        onPressed: _waveController.file != null
+                            ? _deleteRecording
+                            : null,
                       ),
                     ],
                   ),
@@ -224,6 +250,16 @@ class _MyAppState extends State<MyApp> {
     //   await PlatformHelper.downloadFile(file);
     //   return true;
     // }());
+  }
+
+  Future<void> _deleteRecording() async {
+    final file = _waveController.file;
+    if (file == null) return;
+
+    _amplitudes.clear();
+    _waveController.clear();
+    if (!kIsWeb) await File(file.path).delete();
+    _textController.text = '';
   }
 
   Future<void> _playRecording() async {

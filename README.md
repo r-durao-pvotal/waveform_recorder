@@ -1,14 +1,22 @@
-The [waveform_recorder package](https://pub.dev/packages/waveform_recorder) provides a widget to show a waveform as an audio stream is being recorded in the style of recent AI chat packages.
+The [waveform_recorder package](https://pub.dev/packages/waveform_recorder)
+provides a widget to show a waveform as an audio stream is being recorded in the
+style of recent AI chat packages.
 
-![Screenshot of waveform_recorder in action](https://raw.githubusercontent.com/csells/waveform_recorder/refs/heads/main/readme/screenshot3.png)
+![Screenshot of waveform_recorder in
+action](https://raw.githubusercontent.com/csells/waveform_recorder/refs/heads/main/readme/screenshot3.png)
 
 ## Setup
 
-For this package to work, you'll need to set up [the underlying `record` package](https://pub.dev/packages/record) according to [the setup and permission instructions](https://pub.dev/packages/record#setup-permissions-and-others).
+For this package to work, you'll need to set up [the underlying `record`
+package](https://pub.dev/packages/record) according to [the setup and permission
+instructions](https://pub.dev/packages/record#setup-permissions-and-others).
 
 ## Usage
 
-The main entry point for this package is the `WaveformRecorder` widget, which requires an instance of the `WaveformRecorderController` to start/stop recording. Here's an example of using the recorder to record audio and then allowing the user to play it back:
+The main entry point for this package is the `WaveformRecorder` widget, which
+requires an instance of the `WaveformRecorderController` to start/stop
+recording. Here's an example of using the recorder to record audio and then
+allowing the user to play it back:
 
 ```dart
 import 'dart:async';
@@ -132,7 +140,13 @@ class _MyAppState extends State<MyApp> {
 
 ### Usage Considerations
 
-For all platforms except the web, the output of a record operation is a file on your hard drive; it's your app's responsibility to remove this temp file when it's done with it. When executing on the web, the file (an instance of the XFile type from [the cross_file package](https://pub.dev/packages/cross_file)) of the recorded audio will contain a path to a blob URL but otherwise, it will be a file in the file system. You can get the path to that file from `WaveformRecorderController.file.path`, e.g.
+For all platforms except the web, the output of a record operation is a file on
+your hard drive; it's your app's responsibility to remove this temp file when
+it's done with it. When executing on the web, the file (an instance of the XFile
+type from [the cross_file package](https://pub.dev/packages/cross_file)) of the
+recorded audio will contain a path to a blob URL but otherwise, it will be a
+file in the file system. You can get the path to that file from
+`WaveformRecorderController.file.path`, e.g.
 
 ```dart
   Future<void> _deleteRecording() async {

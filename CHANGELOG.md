@@ -5,8 +5,13 @@
   `WaveformRecorderController` as a broadcast stream to enable listeners to
   gather the amplitudes for their own purpose, e.g. to show their own waveform
 
+* added a `WaveformController.clear()` method to reset the controller back to
+  the original state
+
 * updated the example app to show the waveform after it's been recorded
   (although it's pretty ugly as it is; PRs appreciated!)
+
+* update the example app to allow for deleted the generated file
 
 ## 1.6.0
 

@@ -233,4 +233,19 @@ class WaveformRecorderController extends ChangeNotifier {
         AudioEncoder.wav => 'audio/wav',
         AudioEncoder.pcm16bits => 'audio/pcm',
       };
+
+  /// Clears the current recording state.
+  ///
+  /// After calling this method, the controller will be in the same state
+  /// as when it was first created, ready for a new recording.
+  void clear() {
+    _stopwatch.stop();
+    unawaited(_audioRecorder?.dispose());
+    _file = null;
+    _length = Duration.zero;
+    _startTime = null;
+    _amplitudeStream = null;
+    _audioRecorder = null;
+    notifyListeners();
+  }
 }
