@@ -3,7 +3,7 @@ provides a widget to show a waveform as an audio stream is being recorded in the
 style of recent AI chat packages.
 
 ![Screenshot of waveform_recorder in
-action](https://raw.githubusercontent.com/csells/waveform_recorder/refs/heads/main/readme/screenshot3.png)
+action](https://raw.githubusercontent.com/csells/waveform_recorder/refs/heads/main/readme/screenshot.png)
 
 ## Setup
 
