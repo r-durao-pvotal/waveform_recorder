@@ -1,3 +1,7 @@
+## 1.6.2
+
+* README screenshot tweak
+
 ## 1.6.1
 
 * fix [#8](https://github.com/csells/waveform_recorder/issues/8): Display
