@@ -4,7 +4,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-// import 'package:waveform_recorder/src/platform_helper/platform_helper.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
 void main() => runApp(const MyApp());
@@ -37,12 +36,9 @@ class _MyAppState extends State<MyApp> {
               children: [
                 Expanded(
                   child: Center(
-                    child: OutlinedButton(
-                      onPressed: !_waveController.isRecording &&
-                              _waveController.file != null
-                          ? _playRecording
-                          : null,
-                      child: const Text('Play'),
+                    child: Text(
+                      _textController.text,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                 ),
@@ -75,28 +71,106 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                       const Gap(8),
-                      if(_waveController.isRecording)
-                      IconButton(
-                        icon: Icon(
-                          _waveController.isPaused
-                              ? Icons.play_arrow
-                              : Icons.pause,
+                      if (_waveController.isRecording)
+                        IconButton(
+                          tooltip: _waveController.isPaused
+                              ? 'Resume Recording'
+                              : 'Pause Recording',
+                          icon: Container(
+                            width: 32,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _waveController.isPaused
+                                  ? Colors.purple
+                                  : Colors.orange,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                _waveController.isPaused
+                                    ? Icons.fiber_manual_record
+                                    : Icons.pause,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          onPressed: _togglePauseRecording,
                         ),
-                        onPressed: _togglePauseRecording
-                      ),
                       IconButton(
-                        icon: Icon(
-                          _waveController.isRecording ? Icons.stop : Icons.mic,
+                        tooltip: _waveController.isRecording
+                            ? 'Stop Recording'
+                            : 'Start Recording',
+                        icon: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _waveController.isRecording
+                                ? Colors.blue
+                                : Colors.green,
+                          ),
+                          child: Center(
+                            child: Icon(
+                              _waveController.isRecording
+                                  ? Icons.stop
+                                  : Icons.mic,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                         onPressed: _toggleRecording,
                       ),
                       if (_waveController.isRecording)
                         IconButton(
-                          icon: const Icon(
-                            Icons.delete,
+                          tooltip: 'Cancel Recording',
+                          icon: Container(
+                            width: 32,
+                            height: 32,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.close,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                           onPressed: _cancelRecording,
                         ),
+                      IconButton(
+                        tooltip: _waveController.isRecording
+                            ? ''
+                            : _waveController.file != null
+                                ? 'Play Recording'
+                                : 'No recording to play',
+                        onPressed: !_waveController.isRecording &&
+                                _waveController.file != null
+                            ? _playRecording
+                            : null,
+                        icon: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: !_waveController.isRecording &&
+                                    _waveController.file != null
+                                ? Colors.yellow
+                                : Colors.grey,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.play_arrow,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -117,10 +191,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _togglePauseRecording() => switch (_waveController.isPaused) {
-    true => _waveController.resumeRecording(),
-    false => _waveController.pauseRecording(),
-  };
-
+        true => _waveController.resumeRecording(),
+        false => _waveController.pauseRecording(),
+      };
 
   Future<void> _onRecordingStopped() async {
     final file = _waveController.file;

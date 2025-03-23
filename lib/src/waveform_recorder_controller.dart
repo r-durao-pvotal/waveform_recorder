@@ -39,7 +39,6 @@ class WaveformRecorderController extends ChangeNotifier {
   var _length = Duration.zero;
   DateTime? _startTime;
 
-
   ///This keeps track of the time elapsed since recording was started.
   final Stopwatch _stopwatch = Stopwatch();
 
@@ -80,7 +79,9 @@ class WaveformRecorderController extends ChangeNotifier {
     _file = null;
     _length = Duration.zero;
     _startTime = null;
-    _stopwatch..stop()..reset();
+    _stopwatch
+      ..stop()
+      ..reset();
     super.dispose();
   }
 
@@ -133,7 +134,9 @@ class WaveformRecorderController extends ChangeNotifier {
     _audioRecorder = null;
     _amplitudeStream = null;
     _startTime = null;
-    _stopwatch..stop()..reset();
+    _stopwatch
+      ..stop()
+      ..reset();
 
     notifyListeners();
   }
@@ -146,7 +149,7 @@ class WaveformRecorderController extends ChangeNotifier {
     assert(_file == null);
     assert(_length == Duration.zero);
 
-    if(await _audioRecorder!.isRecording()){
+    if (await _audioRecorder!.isRecording()) {
       await _audioRecorder!.pause();
       _stopwatch.stop();
     }
@@ -162,7 +165,7 @@ class WaveformRecorderController extends ChangeNotifier {
     assert(_file == null);
     assert(_length == Duration.zero);
 
-    if(await _audioRecorder!.isPaused()){
+    if (await _audioRecorder!.isPaused()) {
       await _audioRecorder!.resume();
       _stopwatch.start();
     }
@@ -190,7 +193,9 @@ class WaveformRecorderController extends ChangeNotifier {
     _audioRecorder = null;
     _amplitudeStream = null;
     _startTime = null;
-    _stopwatch..stop()..reset();
+    _stopwatch
+      ..stop()
+      ..reset();
 
     notifyListeners();
   }

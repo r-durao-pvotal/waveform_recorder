@@ -1,6 +1,8 @@
 ## 1.6.0
 
-* fix [#TODO]: TODO
+* fix [#5](https://github.com/csells/waveform_recorder/issues/5): Add ability to
+  pause recording. Thanks to @Shashwat-111 for [the
+  PR](https://github.com/csells/waveform_recorder/pull/6)!
 
 ## 1.5.0
 
