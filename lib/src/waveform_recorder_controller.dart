@@ -109,9 +109,12 @@ class WaveformRecorderController extends ChangeNotifier {
     _stopwatch.start();
 
     // map the amplitude types as they stream in
-    _amplitudeStream = _audioRecorder!.onAmplitudeChanged(interval).map(
+    _amplitudeStream = _audioRecorder!
+        .onAmplitudeChanged(interval)
+        .map(
           (a) => waveform.Amplitude(current: a.current, max: a.max),
-        );
+        )
+        .asBroadcastStream(); // allows multiple listeners
 
     notifyListeners();
   }

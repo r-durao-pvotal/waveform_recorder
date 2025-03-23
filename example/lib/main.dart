@@ -4,6 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:waveform_flutter/waveform_flutter.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
 void main() => runApp(const MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _textController = TextEditingController();
   final _waveController = WaveformRecorderController();
+  final _amplitudes = List<Amplitude>.empty(growable: true);
 
   @override
   void dispose() {
@@ -34,14 +36,6 @@ class _MyAppState extends State<MyApp> {
             listenable: _waveController,
             builder: (context, _) => Column(
               children: [
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      _textController.text,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -174,16 +168,33 @@ class _MyAppState extends State<MyApp> {
                     ],
                   ),
                 ),
+                if (!_waveController.isRecording && _amplitudes.isNotEmpty)
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: 300,
+                        height: 100,
+                        child: AnimatedWaveList(
+                          stream: Stream.fromIterable(_amplitudes),
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
         ),
       );
 
-  Future<void> _toggleRecording() => switch (_waveController.isRecording) {
-        true => _waveController.stopRecording(),
-        false => _waveController.startRecording(),
-      };
+  Future<void> _toggleRecording() async {
+    if (_waveController.isRecording) {
+      await _waveController.stopRecording();
+    } else {
+      await _waveController.startRecording();
+      _waveController.amplitudeStream.listen(_amplitudes.add);
+    }
+  }
 
   Future<void> _cancelRecording() async {
     await _waveController.cancelRecording();

@@ -1,3 +1,13 @@
+## 1.6.1
+
+* fix [#8](https://github.com/csells/waveform_recorder/issues/8): Display
+  waveform if not recording; exposed `amplitudeStream` from the
+  `WaveformRecorderController` as a broadcast stream to enable listeners to
+  gather the amplitudes for their own purpose, e.g. to show their own waveform
+
+* updated the example app to show the waveform after it's been recorded
+  (although it's pretty ugly as it is; PRs appreciated!)
+
 ## 1.6.0
 
 * fix [#5](https://github.com/csells/waveform_recorder/issues/5): Add ability to

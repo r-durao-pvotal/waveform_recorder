@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   gap: any
+  waveform_flutter: ^1.2.0
   waveform_recorder:
     path: ../
 
