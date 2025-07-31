@@ -93,16 +93,17 @@ class _WaveformRecorderState extends State<WaveformRecorder> {
                 ),
               ),
               const Gap(8),
-              Expanded(
-                child: AnimatedWaveList(
-                  stream: widget.controller.amplitudeStream,
-                  barBuilder: (animation, amplitude) => WaveFormBar(
-                    animation: animation,
-                    amplitude: amplitude,
-                    color: widget.waveColor,
+              if (widget.controller.amplitudeStream != null)
+                Expanded(
+                  child: AnimatedWaveList(
+                    stream: widget.controller.amplitudeStream!,
+                    barBuilder: (animation, amplitude) => WaveFormBar(
+                      animation: animation,
+                      amplitude: amplitude,
+                      color: widget.waveColor,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

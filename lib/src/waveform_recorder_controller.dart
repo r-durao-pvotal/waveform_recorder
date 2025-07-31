@@ -55,8 +55,7 @@ class WaveformRecorderController extends ChangeNotifier {
   /// Provides a stream of amplitude data for generating the waveform.
   ///
   /// Throws an exception if called when not recording.
-  Stream<waveform.Amplitude> get amplitudeStream =>
-      _amplitudeStream ?? Stream.empty();
+  Stream<waveform.Amplitude>? get amplitudeStream => _amplitudeStream;
 
   /// The recorded audio file.
   ///
