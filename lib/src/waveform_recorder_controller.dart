@@ -56,7 +56,7 @@ class WaveformRecorderController extends ChangeNotifier {
   ///
   /// Throws an exception if called when not recording.
   Stream<waveform.Amplitude> get amplitudeStream =>
-      _amplitudeStream ?? (throw Exception('Not recording'));
+      _amplitudeStream ?? Stream.empty();
 
   /// The recorded audio file.
   ///
